@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_secure_token
 
-  enum role: { visitor: 0, admin: 1, patient: 2, psychologist: 3 }
+  enum role: { admin: 0, patient: 1, psychologist: 2 }
 
   validates :email, presence: true, uniqueness: true
 end
