@@ -5,6 +5,8 @@ class User < ApplicationRecord
   # dependent: :destroy causes all the associated objects to also be destroyed
   has_many :people, dependent: :destroy
 
+  has_many :patients, dependent: :destroy
+
   enum role: { admin: 0, patient: 1, psychologist: 2 }
 
   validates :email, presence: true, uniqueness: true,
