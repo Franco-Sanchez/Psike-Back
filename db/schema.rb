@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_214622) do
+ActiveRecord::Schema.define(version: 2021_03_23_222411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,25 @@ ActiveRecord::Schema.define(version: 2021_03_23_214622) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "patient_id", null: false
     t.index ["patient_id"], name: "index_diagnoses_on_patient_id"
+  end
+
+  create_table "hours", force: :cascade do |t|
+    t.time "start_hour"
+    t.time "end_hour"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.text "description"
+    t.string "position"
+    t.string "enterprise"
+    t.bigint "psychologist_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["psychologist_id"], name: "index_jobs_on_psychologist_id"
   end
 
   create_table "patients", force: :cascade do |t|
@@ -95,6 +114,7 @@ ActiveRecord::Schema.define(version: 2021_03_23_214622) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "diagnoses", "patients"
+  add_foreign_key "jobs", "psychologists"
   add_foreign_key "patients", "users"
   add_foreign_key "people", "users"
   add_foreign_key "psychologists", "users"
