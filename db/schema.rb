@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_013840) do
+ActiveRecord::Schema.define(version: 2021_03_24_022212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,15 @@ ActiveRecord::Schema.define(version: 2021_03_24_013840) do
     t.bigint "specialty_id", null: false
   end
 
+  create_table "rankings", force: :cascade do |t|
+    t.integer "quantity"
+    t.text "description"
+    t.bigint "appointment_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["appointment_id"], name: "index_rankings_on_appointment_id"
+  end
+
   create_table "schedules", force: :cascade do |t|
     t.bigint "hour_id", null: false
     t.bigint "day_id", null: false
@@ -160,6 +169,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_013840) do
   add_foreign_key "patients", "users"
   add_foreign_key "people", "users"
   add_foreign_key "psychologists", "users"
+  add_foreign_key "rankings", "appointments"
   add_foreign_key "schedules", "days"
   add_foreign_key "schedules", "hours"
 end
