@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_23_231053) do
+ActiveRecord::Schema.define(version: 2021_03_24_013840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,23 @@ ActiveRecord::Schema.define(version: 2021_03_23_231053) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "appointments", force: :cascade do |t|
+    t.text "feedback"
+    t.integer "status", default: 0
+    t.date "day"
+    t.text "reason"
+    t.bigint "schedule_id", null: false
+    t.bigint "patient_id", null: false
+    t.bigint "psychologist_id", null: false
+    t.bigint "diagnosis_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["diagnosis_id"], name: "index_appointments_on_diagnosis_id"
+    t.index ["patient_id"], name: "index_appointments_on_patient_id"
+    t.index ["psychologist_id"], name: "index_appointments_on_psychologist_id"
+    t.index ["schedule_id"], name: "index_appointments_on_schedule_id"
   end
 
   create_table "days", force: :cascade do |t|
@@ -106,6 +123,15 @@ ActiveRecord::Schema.define(version: 2021_03_23_231053) do
     t.bigint "specialty_id", null: false
   end
 
+  create_table "schedules", force: :cascade do |t|
+    t.bigint "hour_id", null: false
+    t.bigint "day_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["day_id"], name: "index_schedules_on_day_id"
+    t.index ["hour_id"], name: "index_schedules_on_hour_id"
+  end
+
   create_table "specialties", force: :cascade do |t|
     t.string "name"
     t.boolean "status", default: false
@@ -125,9 +151,15 @@ ActiveRecord::Schema.define(version: 2021_03_23_231053) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "appointments", "diagnoses"
+  add_foreign_key "appointments", "patients"
+  add_foreign_key "appointments", "psychologists"
+  add_foreign_key "appointments", "schedules"
   add_foreign_key "diagnoses", "patients"
   add_foreign_key "jobs", "psychologists"
   add_foreign_key "patients", "users"
   add_foreign_key "people", "users"
   add_foreign_key "psychologists", "users"
+  add_foreign_key "schedules", "days"
+  add_foreign_key "schedules", "hours"
 end
