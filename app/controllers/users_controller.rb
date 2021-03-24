@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   def show
     person = current_user.person
     render json: { name: person.name, lastname: person.lastname, birthdate: person.birthdate,
-                   email: current_user.email }
+                   avatar: person.avatar, email: current_user.email }
   end
 
   # POST /signup

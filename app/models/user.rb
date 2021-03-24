@@ -17,14 +17,4 @@ class User < ApplicationRecord
   def invalidate_token
     update(token: nil)
   end
-
-  # def self.create_user(person, params)
-  #   user = User.new(params)
-  #   user.person = person
-  #   if user.save
-  #     render json: { token: user.token }, status: :created
-  #   else
-  #     render json: user.errors, status: :bad_request
-  #   end
-  # end
 end
