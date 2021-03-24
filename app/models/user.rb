@@ -13,4 +13,8 @@ class User < ApplicationRecord
                     format: { with: /\A\w+@gmail\.com\z/,
                               message: 'Your email should be similar to example@gmail.com' }
   validates :password, length: { minimum: 6 }, allow_nil: true
+
+  def invalidate_token
+    update(token: nil)
+  end
 end
