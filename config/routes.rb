@@ -6,7 +6,9 @@ Rails.application.routes.draw do
 
   post '/signup', to: 'users#create'
 
-  resource :profile, controller: :users, except: :create
+  resource :profile, controller: :users, except: :create do
+    # resources :appointments, only: %i[index create]
+  end
 
   resources :psychologists, only: %i[index show]
 
