@@ -1,7 +1,14 @@
 class PsychologistsController < ApplicationController
   skip_before_action :authorize
 
-  def index; end
+  # GET /psychologists
+  def index
+    render json: Psychologist.all
+  end
 
-  def show; end
+  # GET /psychologists/:id
+  def show
+    psychologist = Psychologist.find(params[:id])
+    render json: psychologist
+  end
 end

@@ -8,34 +8,32 @@
 
 require 'faker'
 
-# Start Create Person
-7.times do
+p 'Start Create Person'
+(1..18).each do
   Person.create(name: Faker::Name.first_name , lastname: Faker::Name.last_name, 
                 identity_document: Faker::Number.number(digits: 8), 
                 nationality: Faker::Nation.nationality, 
                 birthdate: Faker::Date.birthday(min_age: 1, max_age: 100))
 end
-# End Create Person
+p 'End Create Person'
 
-# Start Create User
-7.times do |id|
-  User.create(email: "#{Faker::Internet.unique.username}@gmail.com",
+p 'Start Create User'
+(1..18).each do |id|
+  User.create(email: "#{Faker::Lorem.unique.word}@gmail.com",
               password: Faker::Internet.password(min_length: 6),
               person: Person.find(id))
 end
-# End Create User
+p 'End Create User'
 
-# Start Create Psychologist
-2.times do |id|
+p 'Start Create Psychologist'
+(1..8).each do |id|
   Psychologist.create(biography: Faker::Lorem.paragraph, price: Faker::Number.number(digits: 3),
-                      linkedInd: Faker::Internet.domain_name(domain: "linkedIn"), user: User.find(id))
+                      linkedIn: Faker::Internet.domain_name(domain: "linkedIn"), user: User.find(id))
 end
-# End Create Psychologist
+p 'End Create Psychologist'
 
-# Start Create Patient
-initial_id = 2
-
-5.times do |i|
-  Patient.create(user: User.find(initial_id + i))
+p 'Start Create Patient'
+(9..18).each do |id|
+  Patient.create(user: User.find(id))
 end
-# End Create Patient
+p 'End Create Patient'
