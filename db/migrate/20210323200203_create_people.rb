@@ -6,7 +6,6 @@ class CreatePeople < ActiveRecord::Migration[6.0]
       t.integer :identity_document
       t.string :nationality
       t.date :birthdate
-      t.references :user, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_032824) do
+ActiveRecord::Schema.define(version: 2021_03_24_153131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,10 +114,8 @@ ActiveRecord::Schema.define(version: 2021_03_24_032824) do
     t.integer "identity_document"
     t.string "nationality"
     t.date "birthdate"
-    t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_people_on_user_id"
   end
 
   create_table "psychologists", force: :cascade do |t|
@@ -177,7 +175,9 @@ ActiveRecord::Schema.define(version: 2021_03_24_032824) do
     t.integer "role"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "person_id", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["person_id"], name: "index_users_on_person_id"
     t.index ["token"], name: "index_users_on_token", unique: true
   end
 
@@ -192,10 +192,10 @@ ActiveRecord::Schema.define(version: 2021_03_24_032824) do
   add_foreign_key "diagnoses", "patients"
   add_foreign_key "jobs", "psychologists"
   add_foreign_key "patients", "users"
-  add_foreign_key "people", "users"
   add_foreign_key "psychologists", "users"
   add_foreign_key "rankings", "appointments"
   add_foreign_key "schedules", "days"
   add_foreign_key "schedules", "hours"
   add_foreign_key "transfers", "appointments"
+  add_foreign_key "users", "people"
 end
