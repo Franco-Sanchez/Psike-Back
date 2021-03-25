@@ -4,8 +4,7 @@ class UsersController < ApplicationController
   # GET /profile
   def show
     person = current_user.person
-    render json: { name: person.name, lastname: person.lastname, birthdate: person.birthdate,
-                   avatar: person.avatar, email: current_user.email }
+    render json: User.get_profile(person, current_user)
   end
 
   # POST /signup
@@ -47,7 +46,7 @@ class UsersController < ApplicationController
     user = User.new(params)
     user.person = person
     if user.save
-      render json: { token: user.token }, status: :created
+      render json: User.get_profile(person, user), status: :created
     else
       render json: user.errors, status: :bad_request
     end
