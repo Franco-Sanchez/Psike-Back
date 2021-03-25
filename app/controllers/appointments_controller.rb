@@ -13,7 +13,7 @@ class AppointmentsController < ApplicationController
 
   # POST /appointments
   def create
-    diagnosis = @patient.diagnoses.where(status: false)
+    diagnosis = @patient.diagnoses.where(status: false) # '.first' tendria que haber un solo false
     appointment = Appointment.new(appointment_params)
     appointment.diagnosis = diagnosis
     appointment.patient = @patient
@@ -27,7 +27,8 @@ class AppointmentsController < ApplicationController
   private
 
   def appointment_params
-    params.require(:appointment).permit(:feedback, :status, :day, :reason, :psychologist, :schedule)
+    params.require(:appointment).permit(:feedback, :status, :day, :reason, :psychologist_id,
+                                        :schedule_id)
   end
 
   def found_patient
