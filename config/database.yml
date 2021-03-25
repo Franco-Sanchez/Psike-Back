@@ -20,6 +20,7 @@ default: &default
   # For details on connection pooling, see Rails configuration guide
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
 
 development:
   <<: *default
@@ -80,6 +81,7 @@ test:
 #
 production:
   <<: *default
-  database: psike_production
-  username: psike
-  password: <%= ENV['PSIKE_DATABASE_PASSWORD'] %>
+  url: postgres://eabvinmnuopkys:397e9fbe945b7579e12f5ce4c383fd23b2c179b77f717c45d47f346912328013@ec2-18-204-74-74.compute-1.amazonaws.com:5432/dehdevjg5mjpj5
+  # database: psike_production
+  # username: psike
+  # password: <%= ENV['PSIKE_DATABASE_PASSWORD'] %>
