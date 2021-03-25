@@ -3,12 +3,14 @@ class PsychologistsController < ApplicationController
 
   # GET /psychologists
   def index
-    render json: Psychologist.all
+    psychologists = Psychologist.all
+    psychologists_render = psychologists.map { |psychologist| Psychologist.get_index(psychologist) }
+    render json: psychologists_render
   end
 
   # GET /psychologists/:id
   def show
     psychologist = Psychologist.find(params[:id])
-    render json: psychologist
+    render json: Psychologist.get_show(psychologist)
   end
 end

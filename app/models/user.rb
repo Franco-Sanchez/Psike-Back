@@ -17,4 +17,10 @@ class User < ApplicationRecord
   def invalidate_token
     update(token: nil)
   end
+
+  def self.get_profile(person, user)
+    { id: person.id, name: person.name, lastname: person.lastname,
+      identity_document: person.identity_document, nationality: person.nationality,
+      birthdate: person.birthdate, avatar: person.avatar, email: user.email, token: user.token }
+  end
 end
