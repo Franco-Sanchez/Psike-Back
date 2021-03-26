@@ -21,11 +21,8 @@ people = Person.all
 
 p 'Start Create User'
 people.each do |person|
-  # (1..2).each do
-    User.create(email: "#{Faker::Lorem.unique.word}@gmail.com",
-      password: '123456',
-      person: person)
-  # end
+  User.create(email: "#{Faker::Lorem.unique.word}@gmail.com",
+              password: '123456', person: person)
 end
 p 'End Create User'
 
@@ -33,25 +30,21 @@ users = User.all
 
 p 'Start Create Psychologist'
 users.first(12).each do |user|
-  # (1..2).each do
-    Psychologist.create(biography: Faker::Lorem.paragraph, price: Faker::Number.number(digits: 3),
+  Psychologist.create(biography: Faker::Lorem.paragraph, price: random(50..120),
                       linkedIn: Faker::Internet.domain_name(domain: "linkedIn"), user: user)
-  # end
 end
 p 'End Create Psychologist'
 
 p 'Start Create Patient'
 users.last(18).each do |user|
-  # (1..3).each do
-    Patient.create(user: user)
-  # end
+  Patient.create(user: user)
 end
 p 'End Create Patient'
 
 p 'Start Create Specialty'
-(1..5).each do
-  Specialty.create(name: Faker::Job.unique.field)
-end
+# (1..5).each do
+#   Specialty.create(name: Faker::Job.unique.field)
+# end
 p 'End Create Specialty'
 
 days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
