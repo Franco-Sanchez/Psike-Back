@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
     t.bigint "message_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "type"
+    t.integer "category"
     t.index ["appointment_id"], name: "index_comments_on_appointment_id"
     t.index ["message_id"], name: "index_comments_on_message_id"
     t.index ["patient_id"], name: "index_comments_on_patient_id"
@@ -160,7 +160,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
     t.bigint "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "type"
+    t.integer "category"
     t.index ["parent_id"], name: "index_specialties_on_parent_id"
   end
 
@@ -193,7 +193,6 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
   add_foreign_key "appointments", "psychologists"
   add_foreign_key "appointments", "schedules"
   add_foreign_key "comments", "appointments"
-  add_foreign_key "comments", "comments", column: "message_id"
   add_foreign_key "comments", "patients"
   add_foreign_key "diagnoses", "patients"
   add_foreign_key "jobs", "psychologists"
@@ -203,7 +202,6 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
   add_foreign_key "schedules", "days"
   add_foreign_key "schedules", "hours"
   add_foreign_key "schedules", "psychologists"
-  add_foreign_key "specialties", "specialties", column: "parent_id"
   add_foreign_key "transfers", "appointments"
   add_foreign_key "users", "people"
 end

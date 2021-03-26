@@ -3,7 +3,7 @@ class CreateSpecialties < ActiveRecord::Migration[6.0]
     create_table :specialties do |t|
       t.string :name
       t.boolean :status, default: false
-      t.references :parent, foreign_key: { to_table: :specialties }
+      t.references :parent, index: true
 
       t.timestamps
     end

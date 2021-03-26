@@ -7,17 +7,21 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 require 'faker'
+require_relative './variables/variables.rb'
 
 p 'Start Create Person'
 (1..30).each do
   Person.create(name: Faker::Name.unique.first_name , lastname: Faker::Name.last_name, 
                 identity_document: Faker::Number.number(digits: 8), 
                 nationality: Faker::Nation.nationality, 
-                birthdate: Faker::Date.birthday(min_age: 1, max_age: 100))
+                birthdate: Faker::Date.birthday(min_age: 1, max_age: 100),
+                avatar: { io: File.open('db/seed_images/avatar_default.jpg'), filename: 'avatar.jpg'})
 end
 p 'End Create Person'
 
 people = Person.all
+
+User.create(email: 'test@gmail.com', password:'123456', person: Person.find(1))
 
 p 'Start Create User'
 people.each do |person|
@@ -30,7 +34,7 @@ users = User.all
 
 p 'Start Create Psychologist'
 users.first(12).each do |user|
-  Psychologist.create(biography: Faker::Lorem.paragraph, price: random(50..120),
+  Psychologist.create(biography: Faker::Lorem.paragraph, price: rand(50..120),
                       linkedIn: Faker::Internet.domain_name(domain: "linkedIn"), user: user)
 end
 p 'End Create Psychologist'
@@ -42,9 +46,9 @@ end
 p 'End Create Patient'
 
 p 'Start Create Specialty'
-# (1..5).each do
-#   Specialty.create(name: Faker::Job.unique.field)
-# end
+@specialtiesArr.each do |specialty|
+  Specialty.create(name: specialty, category: 0)
+end
 p 'End Create Specialty'
 
 days = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes"]
@@ -111,6 +115,6 @@ p 'End Create Ranking'
 p 'Start Create Comment'
 patients.each do |patient|
   Comment.create(description: Faker::Lorem.paragraph, patient: Patient.find(patients.index(patient) + 1),
-                  appointment: Appointment.find(patients.index(patient) + 1))
+                  appointment: Appointment.find(patients.index(patient) + 1), category: 0)
 end
 p 'End Create Comment'
