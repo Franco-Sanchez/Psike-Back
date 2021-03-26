@@ -4,7 +4,7 @@ class CreateComments < ActiveRecord::Migration[6.0]
       t.string :description
       t.references :patient, null: false, foreign_key: true
       t.references :appointment, null: false, foreign_key: true
-      t.references :message, foreign_key: { to_table: :comments }
+      t.references :message, index: true
 
       t.timestamps
     end

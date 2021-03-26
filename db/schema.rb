@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_24_225522) do
+ActiveRecord::Schema.define(version: 2021_03_26_153655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,7 @@ ActiveRecord::Schema.define(version: 2021_03_24_225522) do
     t.bigint "message_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "category"
     t.index ["appointment_id"], name: "index_comments_on_appointment_id"
     t.index ["message_id"], name: "index_comments_on_message_id"
     t.index ["patient_id"], name: "index_comments_on_patient_id"
@@ -156,8 +157,11 @@ ActiveRecord::Schema.define(version: 2021_03_24_225522) do
   create_table "specialties", force: :cascade do |t|
     t.string "name"
     t.boolean "status", default: false
+    t.bigint "parent_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "category"
+    t.index ["parent_id"], name: "index_specialties_on_parent_id"
   end
 
   create_table "transfers", force: :cascade do |t|
@@ -189,7 +193,6 @@ ActiveRecord::Schema.define(version: 2021_03_24_225522) do
   add_foreign_key "appointments", "psychologists"
   add_foreign_key "appointments", "schedules"
   add_foreign_key "comments", "appointments"
-  add_foreign_key "comments", "comments", column: "message_id"
   add_foreign_key "comments", "patients"
   add_foreign_key "diagnoses", "patients"
   add_foreign_key "jobs", "psychologists"

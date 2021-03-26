@@ -13,7 +13,7 @@ class Psychologist < ApplicationRecord
     { id: psychologist.id, name: person.name, lastname: person.lastname,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
-      avatar: person.avatar, specialties: psychologist.specialties }
+      avatar: person.avatar, specialties: specialtis_render(psychologist) }
   end
 
   def self.get_show(psychologist)
@@ -26,6 +26,12 @@ class Psychologist < ApplicationRecord
   def self.schedules_render(psychologist)
     psychologist.schedules.map do |schedule|
       { id: schedule.id, hour: Hour.find(schedule.hour_id), day: Day.find(schedule.day_id) }
+    end
+  end
+
+  def self.specialtis_render(psychologist)
+    psychologist.specialties.map do |specialty|
+      { "#{specialty.name}": specialty.subspecialties.map(&:name) }
     end
   end
 
