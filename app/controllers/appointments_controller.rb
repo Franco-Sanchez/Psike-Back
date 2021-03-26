@@ -1,19 +1,19 @@
 class AppointmentsController < ApplicationController
-  before_action :found_patient
+  # before_action :found_patient
 
   # GET /appointments
   def index
-    psychologist = Psychologist.find_by(user: current_user)
-    if @patient
-      render json: @patient.appointments
-    elsif psychologist
-      render json: psychologist.appointments
+    patient = Patient.find_by(user: current_user)
+    appointments_render = patient.appointments.map do |appointment|
+      Appointment.get_index(appointment, current_user)
     end
+    render json: appointments_render
   end
 
   # POST /appointments
   def create
-    diagnosis = @patient.diagnoses.where(status: false) # '.first' tendria que haber un solo false
+    patient = Patient.find_by(user: current_user)
+    diagnosis = patient.diagnoses.where(status: false) # '.first' tendria que haber un solo false
     appointment = Appointment.new(appointment_params)
     appointment.diagnosis = diagnosis
     appointment.patient = @patient
@@ -31,7 +31,7 @@ class AppointmentsController < ApplicationController
                                         :schedule_id)
   end
 
-  def found_patient
-    @patient = Patient.find_by(user: current_user)
-  end
+  # def found_patient
+  #   @patient = Patient.find_by(user: current_user)
+  # end
 end

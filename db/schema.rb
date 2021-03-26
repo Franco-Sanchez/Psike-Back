@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "description"
+    t.text "description"
     t.bigint "patient_id", null: false
     t.bigint "appointment_id", null: false
     t.bigint "message_id"
