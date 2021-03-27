@@ -2,9 +2,9 @@ Rails.application.routes.draw do
   namespace :admin do
     # resources :people, only: %i[index show new create edit update destroy]
     resources :users, only: %i[index show edit update destroy] # new create
+    resources :patients, only: %i[index show new create edit update destroy]
     resources :psychologists, only: %i[index show new create edit update destroy]
     resources :appointments, only: %i[index show new create edit update destroy]
-    resources :patients, only: %i[index show new create edit update destroy]
     resources :comments, only: %i[index show new create edit update destroy]
     resources :days, only: %i[index show new create edit update destroy]
     resources :diagnoses, only: %i[index show new create edit update destroy]
