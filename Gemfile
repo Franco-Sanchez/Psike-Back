@@ -14,6 +14,7 @@ gem 'puma', '~> 4.1'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
+gem 'administrate'
 gem 'bcrypt', '~> 3.1.7'
 gem 'faker'
 gem 'pundit'
