@@ -1,4 +1,4 @@
-(1..30).each do
+(1..5).each do
   Person.create(name: Faker::Name.unique.first_name , lastname: Faker::Name.last_name, 
                 identity_document: Faker::Number.number(digits: 8), 
                 nationality: Faker::Nation.nationality, 

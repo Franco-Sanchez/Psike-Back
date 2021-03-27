@@ -2,22 +2,11 @@ require 'faker'
 # require_relative './variables.rb'
 
 p 'Start Create Person'
-(1..5).each do
-Person.create(name: Faker::Name.unique.first_name , lastname: Faker::Name.last_name, 
-              identity_document: Faker::Number.number(digits: 8), 
-              nationality: Faker::Nation.nationality, 
-              birthdate: Faker::Date.birthday(min_age: 1, max_age: 100),
-              avatar: { io: File.open('db/seeds_images/avatar_default.jpg'), filename: 'avatar.jpg'})
-end
+require_relative './seeds_models/person.rb'
 p 'End Create Person'
 
 p 'Start Create User'
-people = Person.all
-
-people.each do |person|
-  User.create(email: "#{Faker::Lorem.unique.word}@gmail.com",
-              password: '123456', person: person)
-end
+require_relative './seeds_models/user.rb'
 p 'End Create User'
 
 # p 'Start Create Psychologist'
