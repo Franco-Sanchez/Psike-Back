@@ -27,7 +27,11 @@ Rails.application.routes.draw do
 
   resource :profile, controller: :users, except: :create
 
-  resources :psychologists, only: %i[index show]
+  resources :psychologists, only: %i[index show] do
+    # resources :appointments, only: :index
+  end
 
   resources :appointments, only: %i[index create]
+
+  get '/psychologists/:psychologist_id/appointments', to: 'appointments#index_psycho'
 end

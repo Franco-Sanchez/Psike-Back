@@ -1,5 +1,13 @@
 class AppointmentsController < ApplicationController
+  skip_before_action :authorize, only: :index_psycho
   # before_action :found_patient
+
+  # /psychologists/:psychologist_id/appointments
+  def index_psycho
+    psychologist = Psychologist.find(params[:psychologist_id])
+    appointments_filter = psychologist.appointments.where(day: Time.zone.today, status: 0)
+    render json: appointments_filter
+  end
 
   # GET /appointments
   def index
