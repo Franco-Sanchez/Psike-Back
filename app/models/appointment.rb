@@ -20,10 +20,10 @@ class Appointment < ApplicationRecord
     { id: appointment.id,
       psychologist: data_psychologist(appointment.psychologist, person_psychologist),
       patient: data_person(person_patient), feedback: appointment.feedback,
-      schedule: get_schedule(appointment.schedule), status: appointment.status,
-      reason: appointment.reason, diagnosis: get_diagnosis(appointment.diagnosis),
-      transfer: get_transfer(appointment.transfer), comments: get_comments(appointment),
-      ranking: get_ranking(appointment.ranking) }
+      date: appointment.day, schedule: get_schedule(appointment.schedule), 
+      status: appointment.status, reason: appointment.reason,
+      diagnosis: get_diagnosis(appointment.diagnosis), transfer: get_transfer(appointment.transfer),
+      comments: get_comments(appointment), ranking: get_ranking(appointment.ranking) }
   end
 
   def self.data_person(person)

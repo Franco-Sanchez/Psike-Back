@@ -13,13 +13,12 @@ class Psychologist < ApplicationRecord
     { id: psychologist.id, name: person.name, lastname: person.lastname,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
-      avatar: person.avatar, specialties: specialtis_render(psychologist) }
+      avatar: person.avatar, specialties: specialties_render(psychologist) }
   end
 
   def self.get_show(psychologist)
-    attributes = {  linkedIn: psychologist.linkedIn, comments: psychologist.comments,
-                    schedules: schedules_render(psychologist),
-                    appointments: psychologist.appointments }
+    attributes = {  linkedIn: psychologist.linkedIn, comments: get_comments(psychologist),
+                    schedules: schedules_render(psychologist) }
     get_index(psychologist).merge(attributes)
   end
 
@@ -29,9 +28,9 @@ class Psychologist < ApplicationRecord
     end
   end
 
-  def self.specialtis_render(psychologist)
+  def self.specialties_render(psychologist)
     psychologist.specialties.map do |specialty|
-      { "#{specialty.name}": specialty.subspecialties.map(&:name) }
+      { name: specialty.name, subspecialties: specialty.subspecialties.map(&:name) }
     end
   end
 
@@ -43,5 +42,15 @@ class Psychologist < ApplicationRecord
   def self.comments_total(psychologist)
     comments = psychologist.appointments.map { |appointment| appointment.comments.size }
     comments.reduce(0, :+)
+  end
+
+  def self.get_comments(psychologist)
+    psychologist.comments.map do |comment|
+      patient = Patient.find(comment.patient_id)
+      user = User.find(patient.user_id)
+      person_patient = Person.find(user.person_id)
+      { patient: { name: person_patient.name, lastname: person_patient.lastname },
+        description: comment.description }
+    end
   end
 end

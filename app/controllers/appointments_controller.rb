@@ -13,10 +13,10 @@ class AppointmentsController < ApplicationController
   # POST /appointments
   def create
     patient = Patient.find_by(user: current_user)
-    diagnosis = patient.diagnoses.where(status: false) # '.first' tendria que haber un solo false
+    diagnosis = patient.diagnoses.where(status: false).first # where te devuelve un array y por eso el first
     appointment = Appointment.new(appointment_params)
     appointment.diagnosis = diagnosis
-    appointment.patient = @patient
+    appointment.patient = patient
     if appointment.save
       render json: appointment, status: :created
     else
@@ -28,7 +28,7 @@ class AppointmentsController < ApplicationController
 
   def appointment_params
     params.require(:appointment).permit(:feedback, :status, :day, :reason, :psychologist_id,
-                                        :schedule_id)
+                                        :schedule_id, :transfer_id)
   end
 
   # def found_patient
