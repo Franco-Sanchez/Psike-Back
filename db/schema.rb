@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_26_153655) do
+ActiveRecord::Schema.define(version: 2021_03_26_234107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,14 +47,16 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
     t.bigint "diagnosis_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "transfer_id", null: false
     t.index ["diagnosis_id"], name: "index_appointments_on_diagnosis_id"
     t.index ["patient_id"], name: "index_appointments_on_patient_id"
     t.index ["psychologist_id"], name: "index_appointments_on_psychologist_id"
     t.index ["schedule_id"], name: "index_appointments_on_schedule_id"
+    t.index ["transfer_id"], name: "index_appointments_on_transfer_id"
   end
 
   create_table "comments", force: :cascade do |t|
-    t.string "description"
+    t.text "description"
     t.bigint "patient_id", null: false
     t.bigint "appointment_id", null: false
     t.bigint "message_id"
@@ -168,10 +170,8 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
     t.date "day"
     t.integer "amount"
     t.string "code"
-    t.bigint "appointment_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["appointment_id"], name: "index_transfers_on_appointment_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
   add_foreign_key "appointments", "patients"
   add_foreign_key "appointments", "psychologists"
   add_foreign_key "appointments", "schedules"
+  add_foreign_key "appointments", "transfers"
   add_foreign_key "comments", "appointments"
   add_foreign_key "comments", "patients"
   add_foreign_key "diagnoses", "patients"
@@ -202,6 +203,5 @@ ActiveRecord::Schema.define(version: 2021_03_26_153655) do
   add_foreign_key "schedules", "days"
   add_foreign_key "schedules", "hours"
   add_foreign_key "schedules", "psychologists"
-  add_foreign_key "transfers", "appointments"
   add_foreign_key "users", "people"
 end

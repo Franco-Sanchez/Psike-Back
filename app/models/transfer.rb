@@ -1,3 +1,3 @@
 class Transfer < ApplicationRecord
-  belongs_to :appointment
+  has_one :appointment, dependent: :destroy
 end
