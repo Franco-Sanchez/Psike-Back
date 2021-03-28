@@ -34,8 +34,9 @@ class Psychologist < ApplicationRecord
   end
 
   def self.ranking_total(psychologist)
-    rankings = psychologist.appointments.map { |appointment| appointment.ranking.quantity }
-    rankings.size.zero? ? rankings.size : rankings.reduce(0, :+) / rankings.size
+    appointments_filter = psychologist.appointments.filter(&:ranking)
+    rankings = appointments_filter.map { |appointment| appointment.ranking.quantity }
+    rankings.size.zero? ? 0 : rankings.reduce(0, :+) / rankings.size.to_f
   end
 
   def self.comments_total(psychologist)
