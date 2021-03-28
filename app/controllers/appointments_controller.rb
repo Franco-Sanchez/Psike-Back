@@ -1,5 +1,18 @@
 class AppointmentsController < ApplicationController
+  skip_before_action :authorize, only: :index_psycho
   # before_action :found_patient
+
+  # /psychologists/:psychologist_id/appointments
+  def index_psycho
+    psychologist = Psychologist.find(params[:psychologist_id])
+    appointments_filter = psychologist.appointments.where(
+      day: Time.zone.now..(Time.zone.now + 7.days), status: 0
+    )
+    appointments_render = appointments_filter.map do |appointment|
+      Appointment.with_psychologist(appointment)
+    end
+    render json: appointments_render
+  end
 
   # GET /appointments
   def index
@@ -13,10 +26,10 @@ class AppointmentsController < ApplicationController
   # POST /appointments
   def create
     patient = Patient.find_by(user: current_user)
-    diagnosis = patient.diagnoses.where(status: false) # '.first' tendria que haber un solo false
+    diagnosis = patient.diagnoses.where(status: false).first # where te devuelve un array y por eso el first
     appointment = Appointment.new(appointment_params)
     appointment.diagnosis = diagnosis
-    appointment.patient = @patient
+    appointment.patient = patient
     if appointment.save
       render json: appointment, status: :created
     else
@@ -28,7 +41,7 @@ class AppointmentsController < ApplicationController
 
   def appointment_params
     params.require(:appointment).permit(:feedback, :status, :day, :reason, :psychologist_id,
-                                        :schedule_id)
+                                        :schedule_id, :transfer_id)
   end
 
   # def found_patient

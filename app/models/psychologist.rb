@@ -8,18 +8,16 @@ class Psychologist < ApplicationRecord
   has_and_belongs_to_many :specialties
 
   def self.get_index(psychologist)
-    user = User.find(psychologist.user_id)
-    person = Person.find(user.person_id)
+    person = psychologist.user.person
     { id: psychologist.id, name: person.name, lastname: person.lastname,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
-      avatar: person.avatar, specialties: specialtis_render(psychologist) }
+      avatar: person.avatar, specialties: specialties_render(psychologist) }
   end
 
   def self.get_show(psychologist)
-    attributes = {  linkedIn: psychologist.linkedIn, comments: psychologist.comments,
-                    schedules: schedules_render(psychologist),
-                    appointments: psychologist.appointments }
+    attributes = {  linkedIn: psychologist.linkedIn, comments: get_comments(psychologist),
+                    schedules: schedules_render(psychologist) }
     get_index(psychologist).merge(attributes)
   end
 
@@ -29,19 +27,28 @@ class Psychologist < ApplicationRecord
     end
   end
 
-  def self.specialtis_render(psychologist)
+  def self.specialties_render(psychologist)
     psychologist.specialties.map do |specialty|
-      { "#{specialty.name}": specialty.subspecialties.map(&:name) }
+      { name: specialty.name, subspecialties: specialty.subspecialties.map(&:name) }
     end
   end
 
   def self.ranking_total(psychologist)
-    rankings = psychologist.appointments.map { |appointment| appointment.ranking.quantity }
-    rankings.size.zero? ? rankings.size : rankings.reduce(0, :+) / rankings.size
+    appointments_filter = psychologist.appointments.filter(&:ranking)
+    rankings = appointments_filter.map { |appointment| appointment.ranking.quantity }
+    rankings.size.zero? ? 0 : rankings.reduce(0, :+) / rankings.size.to_f
   end
 
   def self.comments_total(psychologist)
     comments = psychologist.appointments.map { |appointment| appointment.comments.size }
     comments.reduce(0, :+)
+  end
+
+  def self.get_comments(psychologist)
+    psychologist.comments.map do |comment|
+      person_patient = comment.patient.user.person
+      { patient: { name: person_patient.name, lastname: person_patient.lastname },
+        description: comment.description }
+    end
   end
 end

@@ -1,5 +1,14 @@
 require 'faker'
-# require_relative './variables.rb'
+require_relative './variables.rb'
+
+p 'Start Create Superadmin'
+Person.create(name: 'test', lastname: 'codeable')
+User.create(email: 'test@gmail.com', password: '123456', role: 0, person: Person.first)
+p 'End Create Superadmin'
+
+p 'Start Create Founders'
+require_relative './founders.rb'
+p 'End Create Founders'
 
 p 'Start Create Person'
 require_relative './seeds_models/person.rb'
@@ -9,25 +18,25 @@ p 'Start Create User'
 require_relative './seeds_models/user.rb'
 p 'End Create User'
 
-# p 'Start Create Psychologist'
-# require_relative './seeds_models/psychologist.rb'
-# p 'End Create Psychologist'
+p 'Start Create Psychologist'
+require_relative './seeds_models/psychologist.rb'
+p 'End Create Psychologist'
 
 # p 'Start Create Patient'
 # require_relative './seeds_models/patient.rb'
 # p 'End Create Patient'
 
-# p 'Start Create Specialty and Subspecialties'
-# require_relative './seeds_models/specialty.rb'
-# p 'End Create Specialty'
+p 'Start Create Specialty and Subspecialties'
+require_relative './seeds_models/specialty.rb'
+p 'End Create Specialty'
 
-# p 'Start Create Day'
-# require_relative './seeds_models/day.rb'
-# p 'End Create Day'
+p 'Start Create Day'
+require_relative './seeds_models/day.rb'
+p 'End Create Day'
 
-# p 'Start Create Hour'
-# require_relative './seeds_models/hour.rb'
-# p 'End Create Hour'
+p 'Start Create Hour'
+require_relative './seeds_models/hour.rb'
+p 'End Create Hour'
 
 # p 'Start Create Schedule'
 # require_relative './seeds_models/schedule.rb'

@@ -52,14 +52,14 @@ end
   Specialty.create(name: sexualidad, category: 1, parent: Specialty.find_by(name: 'Sexualidad e indentidad'))
 end
 
-Specialty.create(name: @consejeria, category: 1, parent: Specialty.find_by(name: 'Orientación Profesional'))
+Specialty.create(name: @consejeria, category: 1, parent: Specialty.find_by(name: 'Consejería'))
 
 @trastornosPersonalidad.each do |trastorno|
-  Specialty.create(name: @consejeria, category: 1, parent: Specialty.find_by(name: 'Trastornos de personalidad'))
+  Specialty.create(name: trastorno, category: 1, parent: Specialty.find_by(name: 'Trastornos de personalidad'))
 end
 
 Specialty.create(name: @trastornosSueno, category: 1, parent: Specialty.find_by(name: 'Trastornos del sueño'))
 
 Specialty.create(name: @trastornosAprendizaje, category: 1, parent: Specialty.find_by(name: 'Trastornos de aprendizaje'))
 
-Specialty.create(name: @autolesion, category: 1, parent: Specialty.find_by(name: 'Autolesiones'))
+Specialty.create(name: @autolesion, category: 1, parent: Specialty.find_by(name: 'Autolesión'))
