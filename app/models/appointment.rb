@@ -7,5 +7,5 @@ class Appointment < ApplicationRecord
   has_one :transfer, dependent: :destroy
   has_many :comments, dependent: :destroy
 
-  enum status: { free: 0, taken: 1, canceled: 2, completed: 3 }
+  enum status: { taken: 0, canceled: 1, completed: 2 }
 end
