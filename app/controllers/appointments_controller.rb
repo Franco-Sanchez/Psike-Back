@@ -8,7 +8,10 @@ class AppointmentsController < ApplicationController
     appointments_filter = psychologist.appointments.where(
       day: Time.zone.now..(Time.zone.now + 7.days), status: 0
     )
-    render json: appointments_filter
+    appointments_render = appointments_filter.map do |appointment|
+      Appointment.with_psychologist(appointment)
+    end
+    render json: appointments_render
   end
 
   # GET /appointments

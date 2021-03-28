@@ -9,10 +9,16 @@ class Appointment < ApplicationRecord
 
   enum status: { taken: 0, canceled: 1, completed: 2 }
 
+  def self.with_psychologist(appointment)
+    { id: appointment.id, status: appointment.status, reason: appointment.reason,
+      date: appointment.day, schedule: get_schedule(appointment.schedule),
+      feedback: appointment.feedback,
+      psychologist: Psychologist.get_show(appointment.psychologist) }
+  end
+
   def self.get_index(appointment, current_user)
-    user_psychologist = User.find(appointment.psychologist.user_id)
-    person_psychologist = Person.find(user_psychologist.person_id)
-    person_patient = Person.find(current_user.person_id)
+    person_psychologist = appointment.psychologist.user.person
+    person_patient = current_user.person
     data_general(appointment, person_psychologist, person_patient)
   end
 
@@ -54,6 +60,6 @@ class Appointment < ApplicationRecord
   end
 
   def self.get_schedule(schedule)
-    { hour: Hour.find(schedule.hour_id), day: Day.find(schedule.day_id) }
+    { id: schedule.id, hour: schedule.hour, day: schedule.day }
   end
 end
