@@ -9,6 +9,12 @@ class Appointment < ApplicationRecord
 
   enum status: { taken: 0, canceled: 1, completed: 2 }
 
+  validate :in_the_past
+
+  def in_the_past
+    errors.add(:day, "Can't be in the past") if day && day < Time.zone.today
+  end
+
   def self.get_index(appointment, current_user)
     user_psychologist = User.find(appointment.psychologist.user_id)
     person_psychologist = Person.find(user_psychologist.person_id)
