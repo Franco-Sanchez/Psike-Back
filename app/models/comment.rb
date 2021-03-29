@@ -7,7 +7,7 @@ class Comment < ApplicationRecord
 
   enum category: { main_comment: 0, reply: 1 }
 
-  validates :category, presence: true
+  validates :description, :category, presence: true
   validate :message_validation
 
   private
