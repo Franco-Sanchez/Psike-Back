@@ -9,6 +9,7 @@ class Appointment < ApplicationRecord
 
   enum status: { taken: 0, canceled: 1, completed: 2 }
 
+  validates :day, :reason, presence: true
   validate :in_the_past
 
   def in_the_past
