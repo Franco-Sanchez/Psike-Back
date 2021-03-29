@@ -7,6 +7,8 @@ class Psychologist < ApplicationRecord
   has_many :comments, through: :appointments
   has_and_belongs_to_many :specialties
 
+  validates :biography, :price, presence: true
+
   def self.get_index(psychologist)
     person = psychologist.user.person
     { id: psychologist.id, name: person.name, lastname: person.lastname,
