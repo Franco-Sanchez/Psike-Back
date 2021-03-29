@@ -6,7 +6,7 @@ class Specialty < ApplicationRecord
 
   enum category: { main_specialty: 0, subspecialty: 1 }
 
-  validates :category, presence: true
+  validates :name, :category, presence: true
   validate :parent_validation
 
   private
