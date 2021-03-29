@@ -5,8 +5,13 @@ class AppointmentsController < ApplicationController
   # /psychologists/:psychologist_id/appointments
   def index_psycho
     psychologist = Psychologist.find(params[:psychologist_id])
-    appointments_filter = psychologist.appointments.where(day: Time.zone.today, status: 0)
-    render json: appointments_filter
+    appointments_filter = psychologist.appointments.where(
+      day: Time.zone.now..(Time.zone.now + 7.days), status: 0
+    )
+    appointments_render = appointments_filter.map do |appointment|
+      Appointment.with_psychologist(appointment)
+    end
+    render json: appointments_render
   end
 
   # GET /appointments

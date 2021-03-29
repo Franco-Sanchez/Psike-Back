@@ -15,10 +15,16 @@ class Appointment < ApplicationRecord
     errors.add(:day, "Can't be in the past") if day && day < Time.zone.today
   end
 
+  def self.with_psychologist(appointment)
+    { id: appointment.id, status: appointment.status, reason: appointment.reason,
+      date: appointment.day, schedule: get_schedule(appointment.schedule),
+      feedback: appointment.feedback,
+      psychologist: Psychologist.get_show(appointment.psychologist) }
+  end
+
   def self.get_index(appointment, current_user)
-    user_psychologist = User.find(appointment.psychologist.user_id)
-    person_psychologist = Person.find(user_psychologist.person_id)
-    person_patient = Person.find(current_user.person_id)
+    person_psychologist = appointment.psychologist.user.person
+    person_patient = current_user.person
     data_general(appointment, person_psychologist, person_patient)
   end
 
@@ -26,7 +32,7 @@ class Appointment < ApplicationRecord
     { id: appointment.id,
       psychologist: data_psychologist(appointment.psychologist, person_psychologist),
       patient: data_person(person_patient), feedback: appointment.feedback,
-      date: appointment.day, schedule: get_schedule(appointment.schedule), 
+      date: appointment.day, schedule: get_schedule(appointment.schedule),
       status: appointment.status, reason: appointment.reason,
       diagnosis: get_diagnosis(appointment.diagnosis), transfer: get_transfer(appointment.transfer),
       comments: get_comments(appointment), ranking: get_ranking(appointment.ranking) }
@@ -60,6 +66,6 @@ class Appointment < ApplicationRecord
   end
 
   def self.get_schedule(schedule)
-    { hour: Hour.find(schedule.hour_id), day: Day.find(schedule.day_id) }
+    { id: schedule.id, hour: schedule.hour, day: schedule.day }
   end
 end

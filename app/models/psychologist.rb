@@ -8,8 +8,7 @@ class Psychologist < ApplicationRecord
   has_and_belongs_to_many :specialties
 
   def self.get_index(psychologist)
-    user = User.find(psychologist.user_id)
-    person = Person.find(user.person_id)
+    person = psychologist.user.person
     { id: psychologist.id, name: person.name, lastname: person.lastname,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
@@ -35,8 +34,9 @@ class Psychologist < ApplicationRecord
   end
 
   def self.ranking_total(psychologist)
-    rankings = psychologist.appointments.map { |appointment| appointment.ranking.quantity }
-    rankings.size.zero? ? rankings.size : rankings.reduce(0, :+) / rankings.size
+    appointments_filter = psychologist.appointments.filter(&:ranking)
+    rankings = appointments_filter.map { |appointment| appointment.ranking.quantity }
+    rankings.size.zero? ? 0 : rankings.reduce(0, :+) / rankings.size.to_f
   end
 
   def self.comments_total(psychologist)
@@ -46,9 +46,7 @@ class Psychologist < ApplicationRecord
 
   def self.get_comments(psychologist)
     psychologist.comments.map do |comment|
-      patient = Patient.find(comment.patient_id)
-      user = User.find(patient.user_id)
-      person_patient = Person.find(user.person_id)
+      person_patient = comment.patient.user.person
       { patient: { name: person_patient.name, lastname: person_patient.lastname },
         description: comment.description }
     end
