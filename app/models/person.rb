@@ -6,6 +6,10 @@ class Person < ApplicationRecord
   validates :name, :lastname, presence: true
   validate :in_the_future
 
+  def self.response_avatar(person)
+    person.avatar.attached? ? person.avatar.service_url : nil
+  end
+
   private
 
   def in_the_future

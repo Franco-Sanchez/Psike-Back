@@ -21,6 +21,7 @@ class User < ApplicationRecord
   def self.get_profile(person, user)
     { id: person.id, name: person.name, lastname: person.lastname,
       identity_document: person.identity_document, nationality: person.nationality,
-      birthdate: person.birthdate, avatar: person.avatar, email: user.email, token: user.token }
+      birthdate: person.birthdate, avatar: Person.response_avatar(person), email: user.email,
+      token: user.token }
   end
 end

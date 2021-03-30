@@ -14,7 +14,7 @@ class Psychologist < ApplicationRecord
     { id: psychologist.id, name: person.name, lastname: person.lastname,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
-      avatar: response_avatar(person),
+      avatar: Person.response_avatar(person),
       specialties: specialties_render(psychologist) }
   end
 
@@ -53,9 +53,5 @@ class Psychologist < ApplicationRecord
       { patient: { name: person_patient.name, lastname: person_patient.lastname },
         description: comment.description }
     end
-  end
-
-  def self.response_avatar(person)
-    person.avatar.attached? ? person.avatar.service_url : nil
   end
 end

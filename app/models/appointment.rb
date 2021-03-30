@@ -40,7 +40,8 @@ class Appointment < ApplicationRecord
 
   def self.data_person(person)
     { name: person.name, lastname: person.lastname, identity_document: person.identity_document,
-      nationality: person.nationality, birthdate: person.birthdate, avatar: person.avatar }
+      nationality: person.nationality, birthdate: person.birthdate,
+      avatar: Person.response_avatar(person) }
   end
 
   def self.data_psychologist(psychologist, person)
@@ -62,7 +63,7 @@ class Appointment < ApplicationRecord
   end
 
   def self.get_ranking(ranking)
-    { quantity: ranking.quantity, description: ranking.description }
+    { quantity: ranking&.quantity, description: ranking&.description }
   end
 
   def self.get_schedule(schedule)
