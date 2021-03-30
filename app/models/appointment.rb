@@ -19,8 +19,7 @@ class Appointment < ApplicationRecord
   def self.with_psychologist(appointment)
     { id: appointment.id, status: appointment.status, reason: appointment.reason,
       date: appointment.day, schedule: get_schedule(appointment.schedule),
-      feedback: appointment.feedback,
-      psychologist: Psychologist.get_show(appointment.psychologist) }
+      feedback: appointment.feedback }
   end
 
   def self.get_index(appointment, current_user)

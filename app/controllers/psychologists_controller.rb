@@ -1,6 +1,10 @@
 class PsychologistsController < ApplicationController
   skip_before_action :authorize
 
+  before_action do
+    ActiveStorage::Current.host = request.base_url
+  end
+
   # GET /psychologists
   def index
     psychologists = Psychologist.all
