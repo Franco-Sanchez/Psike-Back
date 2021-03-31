@@ -3,5 +3,5 @@
                 identity_document: Faker::Number.number(digits: 8), 
                 nationality: Faker::Nation.nationality, 
                 birthdate: Faker::Date.birthday(min_age: 1, max_age: 100),
-                avatar: { io: File.open('db/seeds_images/avatar_default.jpg'), filename: 'avatar.jpg'})
+                avatar: { io: File.open('db/seeds_images/avatar_default.jpg'), filename: 'avatar.jpg' })
 end

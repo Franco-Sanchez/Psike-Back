@@ -2,6 +2,9 @@ class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   before_action :authorize
+  before_action do
+    ActiveStorage::Current.host = request.base_url
+  end
 
   def current_user
     @current_user ||= authenticate_token
