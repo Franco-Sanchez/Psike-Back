@@ -51,7 +51,8 @@ class Psychologist < ApplicationRecord
     psychologist.comments.map do |comment|
       person_patient = comment.patient.user.person
       { patient: { name: person_patient.name, lastname: person_patient.lastname },
-        description: comment.description }
+        description: comment.description,
+        category: comment.category }
     end
   end
 end
