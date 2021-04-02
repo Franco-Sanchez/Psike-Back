@@ -50,7 +50,8 @@ class Psychologist < ApplicationRecord
   def self.get_comments(psychologist)
     psychologist.comments.map do |comment|
       person_patient = comment.patient.user.person
-      { patient: { name: person_patient.name, lastname: person_patient.lastname },
+      { patient: { name: person_patient.name, lastname: person_patient.lastname,
+                   avatar: Person.response_avatar(person_patient) },
         description: comment.description,
         category: comment.category }
     end
