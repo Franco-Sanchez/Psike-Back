@@ -1,7 +1,7 @@
 class AppointmentsController < ApplicationController
   skip_before_action :authorize, only: :index_psycho
   # before_action :found_patient
-  before_action :paypal_init, :except => [:index]
+  before_action :paypal_init, except: [:index]
 
   # /psychologists/:psychologist_id/appointments
   def index_psycho
@@ -26,47 +26,54 @@ class AppointmentsController < ApplicationController
 
   # POST /appointments
   def create
-    puts appointment_params["transfer_id"]
-    begin
-      # Paypal
-      request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest::new(appointment_params["paypal_token"])
-      response = @client.execute(request) 
-      order = response.result.to_h
-      units = order[:purchase_units][0].to_h
-      payments = units[:payments].to_h 
-      captures = payments[:captures][0].to_h
-      amount = captures[:amount].to_h
-      currency = (amount[:value].to_f * 100)
-      transfer = Transfer.new(day:Time.now, amount:currency, code: captures[:id])
-      if transfer.save
-        patient = Patient.find_by(user: current_user)
-        diagnosis = patient.diagnoses.where(status: true).first 
-        appointment = Appointment.new(feedback:appointment_params["feedback"],reason:appointment_params["reason"],day:appointment_params["day"],schedule_id:appointment_params["schedule_id"],psychologist_id:appointment_params["psychologist_id"])
-        appointment.diagnosis = diagnosis
-        appointment.patient = patient
-        appointment.transfer = transfer
-        if appointment.save
-          render json: appointment, status: :created
-        else
-          render json: appointment.errors, status: :bad_request
-        end
+    # Paypal
+    request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest.new(appointment_params['paypal_token'])
+    response = @client.execute(request)
+    order = response.result.to_h
+    units = order[:purchase_units][0].to_h
+    payments = units[:payments].to_h
+    captures = payments[:captures][0].to_h
+    amount = captures[:amount].to_h
+    currency = (amount[:value].to_f * 100)
+    transfer = Transfer.new(day: Time.zone.now, amount: currency, code: captures[:id])
+    if transfer.save
+      patient = Patient.find_by(user: current_user)
+      diagnosis = patient.diagnoses.where(status: true).first
+      appointment = Appointment.new(feedback: appointment_params['feedback'],
+                                    reason: appointment_params['reason'],
+                                    day: appointment_params['day'],
+                                    schedule_id: appointment_params['schedule_id'],
+                                    psychologist_id: appointment_params['psychologist_id'])
+      appointment.diagnosis = diagnosis
+      appointment.patient = patient
+      appointment.transfer = transfer
+      if appointment.save
+        render json: appointment, status: :created
       else
-        render json: transfer.errors, status: :bad_request
+        render json: appointment.errors, status: :bad_request
       end
+    else
+      render json: transfer.errors, status: :bad_request
+    end
+  rescue PayPalHttp::HttpError => e
+    render json: { ok: e.status_code }
+  end
 
-      puts captures[:id]
-     
-    
-    rescue PayPalHttp::HttpError => ioe
-      render json: {ok:ioe.status_code}
-    end 
+  # PATCH /appointments/:id
+  def update
+    appointment = Appointment.find(params[:id])
+    if appointment.update(url: params[:url])
+      render json: appointment
+    else
+      render json: appointment.erros, status: :bad_request
+    end
   end
 
   private
 
   def appointment_params
-    params.permit(:feedback, :status, :day, :reason, :psychologist_id,
-                                        :schedule_id, :transfer_id,:paypal_token)
+    params.permit(:feedback, :status, :day, :reason, :url, :psychologist_id,
+                  :schedule_id, :transfer_id, :paypal_token)
   end
 
   def paypal_init
