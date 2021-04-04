@@ -1,6 +1,7 @@
 class AppointmentsController < ApplicationController
   skip_before_action :authorize, only: :index_psycho
   # before_action :found_patient
+  before_action :paypal_init, :except => [:index]
 
   # /psychologists/:psychologist_id/appointments
   def index_psycho
@@ -25,25 +26,55 @@ class AppointmentsController < ApplicationController
 
   # POST /appointments
   def create
-    patient = Patient.find_by(user: current_user)
-    diagnosis = patient.diagnoses.where(status: false).first # where te devuelve un array y por eso el first
-    appointment = Appointment.new(appointment_params)
-    appointment.diagnosis = diagnosis
-    appointment.patient = patient
-    if appointment.save
-      render json: appointment, status: :created
-    else
-      render json: appointment.errors, status: :bad_request
-    end
+    puts appointment_params["transfer_id"]
+    begin
+      # Paypal
+      request = PayPalCheckoutSdk::Orders::OrdersCaptureRequest::new(appointment_params["paypal_token"])
+      response = @client.execute(request) 
+      order = response.result.to_h
+      units = order[:purchase_units][0].to_h
+      payments = units[:payments].to_h 
+      captures = payments[:captures][0].to_h
+      amount = captures[:amount].to_h
+      currency = (amount[:value].to_f * 100)
+      transfer = Transfer.new(day:Time.now, amount:currency, code: captures[:id])
+      if transfer.save
+        patient = Patient.find_by(user: current_user)
+        diagnosis = patient.diagnoses.where(status: true).first 
+        appointment = Appointment.new(feedback:appointment_params["feedback"],reason:appointment_params["reason"],day:appointment_params["day"],schedule_id:appointment_params["schedule_id"],psychologist_id:appointment_params["psychologist_id"])
+        appointment.diagnosis = diagnosis
+        appointment.patient = patient
+        appointment.transfer = transfer
+        if appointment.save
+          render json: appointment, status: :created
+        else
+          render json: appointment.errors, status: :bad_request
+        end
+      else
+        render json: transfer.errors, status: :bad_request
+      end
+
+      puts captures[:id]
+     
+    
+    rescue PayPalHttp::HttpError => ioe
+      render json: {ok:ioe.status_code}
+    end 
   end
 
   private
 
   def appointment_params
-    params.require(:appointment).permit(:feedback, :status, :day, :reason, :psychologist_id,
-                                        :schedule_id, :transfer_id)
+    params.permit(:feedback, :status, :day, :reason, :psychologist_id,
+                                        :schedule_id, :transfer_id,:paypal_token)
   end
 
+  def paypal_init
+    client_id = 'AVKgL-6ajsbMZ0TH1037XNhGdy396YQ7PL8tqZebGAY9T55TbOVfYgOVBmfod49QZw2W7q9Okb5WLsuH'
+    client_secret = 'EBjaPP799aU3a4_nMlgAj-uR-mbkfhJCDCwT20v1TVEbzTw_rJeTkVoZERKxh9FyuUnF-ESLd_50-dkQ'
+    environment = PayPal::SandboxEnvironment.new client_id, client_secret
+    @client = PayPal::PayPalHttpClient.new environment
+  end
   # def found_patient
   #   @patient = Patient.find_by(user: current_user)
   # end
