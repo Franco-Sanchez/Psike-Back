@@ -18,8 +18,8 @@ gem 'administrate'
 gem 'bcrypt', '~> 3.1.7'
 gem 'cloudinary'
 gem 'faker'
-gem 'pundit'
 gem 'paypal-checkout-sdk'
+gem 'pundit'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
