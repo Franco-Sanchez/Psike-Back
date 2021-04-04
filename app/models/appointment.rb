@@ -10,12 +10,7 @@ class Appointment < ApplicationRecord
   enum status: { taken: 0, canceled: 1, completed: 2 }
 
   validates :day, :reason, presence: true
-  validate :in_the_past
-
-  def in_the_past
-    errors.add(:day, "Can't be in the past") if day && day < Time.zone.today
-  end
-
+  
   def self.with_psychologist(appointment)
     { id: appointment.id, status: appointment.status, reason: appointment.reason,
       date: appointment.day, schedule: get_schedule(appointment.schedule),

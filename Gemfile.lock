@@ -140,6 +140,9 @@ GEM
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
+    paypal-checkout-sdk (1.0.3)
+      paypalhttp (~> 1.0.0)
+    paypalhttp (1.0.0)
     pg (1.2.3)
     puma (4.3.7)
       nio4r (~> 2.0)
@@ -267,6 +270,7 @@ DEPENDENCIES
   cloudinary
   faker
   listen (~> 3.2)
+  paypal-checkout-sdk
   pg (>= 0.18, < 2.0)
   puma (~> 4.1)
   pundit
