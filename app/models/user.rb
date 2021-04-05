@@ -10,7 +10,7 @@ class User < ApplicationRecord
   enum role: { admin: 0, patient: 1, psychologist: 2 }
 
   validates :email, presence: true, uniqueness: true,
-                    format: { with: /\A\w+@gmail\.com\z/,
+                    format: { with: /\A\w+.*@gmail\.com\z/,
                               message: 'Your email should be similar to example@gmail.com' }
   validates :password, length: { minimum: 6 }, allow_nil: true
 
