@@ -10,8 +10,9 @@ class Psychologist < ApplicationRecord
   validates :biography, :price, presence: true
 
   def self.get_index(psychologist)
+    user = psychologist.user
     person = psychologist.user.person
-    { id: psychologist.id, name: person.name, lastname: person.lastname,
+    { id: psychologist.id, name: person.name, lastname: person.lastname, email: user.email,
       biography: psychologist.biography, comments_total: comments_total(psychologist),
       ranking_total: ranking_total(psychologist), price: psychologist.price,
       avatar: Person.response_avatar(person),
