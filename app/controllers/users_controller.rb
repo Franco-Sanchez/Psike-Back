@@ -46,6 +46,8 @@ class UsersController < ApplicationController
     user = User.new(params)
     user.person = person
     if user.save
+      patient = Patient.create(user: user)
+      Diagnosis.create(patient: patient)
       render json: User.get_profile(person, user), status: :created
     else
       render json: user.errors, status: :bad_request
