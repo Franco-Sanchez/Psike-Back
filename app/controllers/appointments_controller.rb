@@ -7,7 +7,7 @@ class AppointmentsController < ApplicationController
   def index_psycho
     psychologist = Psychologist.find(params[:psychologist_id])
     appointments_filter = psychologist.appointments.where(
-      day: Time.zone.now..(Time.zone.now + 7.days), status: 0
+      day: Time.zone.now..(Time.zone.now + 365.days), status: 0
     )
     appointments_render = appointments_filter.map do |appointment|
       Appointment.with_psychologist(appointment)
