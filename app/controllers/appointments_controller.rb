@@ -65,7 +65,7 @@ class AppointmentsController < ApplicationController
     if appointment.update(url: params[:url])
       render json: appointment
     else
-      render json: appointment.erros, status: :bad_request
+      render json: appointment.errors, status: :bad_request
     end
   end
 
